@@ -7,6 +7,7 @@ namespace LifecycleRebalance
 {
     using System;
     using ColossalFramework;
+    using UnityEngine;
 
     /// <summary>
     /// Harmony patches for ResidentAI to implement mod's transport probability settings.
@@ -87,17 +88,30 @@ namespace LifecycleRebalance
         /// Patch is manually applied (and unapplied) depending if custom transport mode probabilities setting is active or not.
         /// </summary>
         /// <param name="__result">Original method result.</param>
+        /// <param name="citizenData">Citizen data.</param>
         /// <param name="ageGroup">Citizen age group.</param>
         /// <returns>Always false (never execute original method).</returns>
-        public static bool GetTaxiProbability(ref int __result, Citizen.AgeGroup ageGroup)
+        public static bool GetTaxiProbability(ref int __result, ref CitizenInstance citizenData, Citizen.AgeGroup ageGroup)
         {
-            // Original method return value.
-            // Array cache has already been set when GetCarProbability was called.
-            __result = s_cacheArray[DataStore.Taxi];
+            // Map edge limits.
+            const float MapEdgeMin = 40f;
+            const float MapEdgeMax = (1920f * 9f) - MapEdgeMin;
 
-            if (LifecycleLogging.UseTransportLog)
+            // Citizens at the edge of the map never call for taxis.
+            Vector3 citizenLocation = citizenData.GetLastFramePosition();
+            if (citizenLocation.x < MapEdgeMin | citizenLocation.x > MapEdgeMax | citizenLocation.y < MapEdgeMin | citizenLocation.y > MapEdgeMax)
             {
-                LifecycleLogging.WriteToLog(LifecycleLogging.TransportLogName, "The same ", ageGroup, " has ", __result, "% chance of using a taxi");
+                __result = 0;
+            }
+            else
+            {
+                // Array cache has already been set when GetCarProbability was called.
+                __result = s_cacheArray[DataStore.Taxi];
+
+                if (LifecycleLogging.UseTransportLog)
+                {
+                    LifecycleLogging.WriteToLog(LifecycleLogging.TransportLogName, "The same ", ageGroup, " has ", __result, "% chance of using a taxi");
+                }
             }
 
             // Don't execute base method after this.
