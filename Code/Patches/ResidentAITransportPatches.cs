@@ -93,13 +93,8 @@ namespace LifecycleRebalance
         /// <returns>Always false (never execute original method).</returns>
         public static bool GetTaxiProbability(ref int __result, ref CitizenInstance citizenData, Citizen.AgeGroup ageGroup)
         {
-            // Map edge limits.
-            const float MapEdgeMin = 40f;
-            const float MapEdgeMax = (1920f * 9f) - MapEdgeMin;
-
-            // Citizens at the edge of the map never call for taxis.
-            Vector3 citizenLocation = citizenData.GetLastFramePosition();
-            if (citizenLocation.x < MapEdgeMin | citizenLocation.x > MapEdgeMax | citizenLocation.y < MapEdgeMin | citizenLocation.y > MapEdgeMax)
+            // Citizens outside owned tiles never call for taxis.  Credit to BP for this.
+            if (Singleton<GameAreaManager>.instance.PointOutOfArea(citizenData.GetLastFramePosition()))
             {
                 __result = 0;
             }
