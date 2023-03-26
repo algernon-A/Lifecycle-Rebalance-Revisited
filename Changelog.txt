@@ -1,6 +1,7 @@
 ﻿Version 1.6.6.1
 
 - Stop residents trying to catch taxis from outside owned tiles (map edge)
+- Update bundled Cities Harmony to 2.2.0
 
 
 Version 1.6.6
