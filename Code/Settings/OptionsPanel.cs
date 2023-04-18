@@ -11,12 +11,12 @@ namespace LifecycleRebalance
     /// <summary>
     /// Lifecycle Rebalance Revisited options panel.
     /// </summary>
-    public sealed class OptionsPanel : UIPanel
+    public sealed class OptionsPanel : OptionsPanelBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionsPanel"/> class.
+        /// Performs on-demand panel setup.
         /// </summary>
-        internal OptionsPanel()
+        protected override void Setup()
         {
             // Add tabstrip.
             AutoTabstrip tabstrip = AutoTabstrip.AddTabstrip(this, 0f, 0f, OptionsPanelManager<OptionsPanel>.PanelWidth, OptionsPanelManager<OptionsPanel>.PanelHeight, out _, tabHeight: 50f);
