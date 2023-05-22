@@ -49,7 +49,7 @@
 "LBR_TRN_TAX","택시 이용 확률 (%)"
 "LBR_TRN_RLO","저밀도 거주지"
 "LBR_TRN_RHI","고밀도 거주지"
-"LBR_TRN_RW2","Residential wall-to-wall"
+"LBR_TRN_RW2","밀집 거주지"
 "LBR_TRN_ERL","자급자족 저밀도 거주지"
 "LBR_TRN_ERH","자급자족 고밀도 거주지"
 "LBR_TRN_CHL","어린이"
