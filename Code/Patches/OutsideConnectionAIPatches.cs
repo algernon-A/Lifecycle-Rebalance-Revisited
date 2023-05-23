@@ -34,9 +34,9 @@ namespace LifecycleRebalance
             // Local variable ILCode indexes (original method).
             const int EducationVarIndex = 2;
             const int NumVarIndex = 3;
-            const int ILoopVarIndex = 17;
-            const int AgeVarIndex = 21;
-            const int Education2VarIndex = 22;
+            const int ILoopVarIndex = 19;
+            const int AgeVarIndex = 23;
+            const int Education2VarIndex = 24;
 
             Logging.Message("starting StartConnectionTransferImpl transpiler");
 
