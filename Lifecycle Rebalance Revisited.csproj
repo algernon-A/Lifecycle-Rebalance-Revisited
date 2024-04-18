@@ -5,9 +5,9 @@
 		<AssemblyTitle>$(Title)</AssemblyTitle>
 		<Description>A Cities: Skylines mod.</Description>
 		<Authors>algernon</Authors>
-		<Copyright>Copyright © 2020-23 algernon, 2016-18 Whitefang Greytail</Copyright>
+		<Copyright>Copyright © 2020-24 algernon, 2016-18 Whitefang Greytail</Copyright>
 		<Product>$(Title)</Product>
-		<Version>1.6.7</Version>
+		<Version>1.6.8</Version>
 		<ManagedDLLPath>$(MSBuildProgramFiles32)/Steam/steamapps/common/Cities_Skylines/Cities_Data/Managed</ManagedDLLPath>
 		<AssemblySearchPaths>
 			$(AssemblySearchPaths);

@@ -1,4 +1,9 @@
-﻿Version 1.6.7
+﻿Version 1.6.8
+
+- Update translations
+
+
+Version 1.6.7
 
 - Compatibility with game version 1.17
 - Update AlgernonCommons
