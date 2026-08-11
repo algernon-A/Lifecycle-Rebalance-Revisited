@@ -30,21 +30,39 @@ namespace LifecycleRebalance
         [HarmonyPrefix]
         public static bool CanMakeBabies(ref bool __result, uint citizenID, ref Citizen data)
         {
-            // data.m_family  access group data?
-            // Only check child 1 and 2. Don't care about 3, won't fit if there's someone there :)
+            // Dead people, people moving in, and homeless people can't have babies.
+            if (data.Dead || ((data.m_flags & Citizen.Flags.MovingIn) != Citizen.Flags.None) || data.m_homeBuilding == 0)
+            {
+                __result = false;
+            }
+            else
+            {
+                // data.m_family  access group data?
+                // Only check child 1 and 2. Don't care about 3, won't fit if there's someone there :)
 
-            // Unlock males within all groups. Find partner except for initial seeding is the exact same age group, so shortcut is allowed
-            __result =
-                !data.Dead &&
-                (
+                // Unlock males within all groups. Find partner except for initial seeding is the exact same age group, so shortcut is allowed
+                __result =
 
                   // Females are now limited to the time that they have aged.  Males are excluded from this calculation so females can still have children.
                   (Citizen.GetGender(citizenID) == Citizen.Gender.Male) ||
 
                   // Exclude females over default maximum adult age (51.4 years).
                   (data.Age <= 180 &&
-                  ((citizenID % DataStore.LifeSpanMultiplier) == Threading.Counter) && (Citizen.GetAgeGroup(data.Age) == Citizen.AgeGroup.Adult)))
-                  && (data.m_flags & Citizen.Flags.MovingIn) == Citizen.Flags.None;
+                  ((citizenID % DataStore.LifeSpanMultiplier) == Threading.Counter) && (Citizen.GetAgeGroup(data.Age) == Citizen.AgeGroup.Adult));
+
+                // Check for CimCare (nursing home) mod (it has a bug where it puts unrelated adults into the same houshold/family unit, so we need to check for that and exclude them from being able to have children).
+                if (__result)
+                {
+                    // Check for CimCare mod AI is via type name.
+                    if (Singleton<BuildingManager>.instance.m_buildings.m_buffer[data.m_homeBuilding].Info.m_buildingAI is BuildingAI homeBuildingAI)
+                    {
+                        if (homeBuildingAI.GetType().Name.StartsWith("CimCareMod"))
+                        {
+                            __result = false;
+                        }
+                    }
+                }
+            }
 
             // Don't execute base method after this.
             return false;
