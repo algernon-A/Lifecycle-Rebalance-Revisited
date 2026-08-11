@@ -1,4 +1,9 @@
-﻿Version 1.6.8
+﻿Version 1.6.9
+
+- Implement workaround for bug in CimCare mod (CimCare puts unrelated adults into same household which breaks game assumptions)
+
+
+Version 1.6.8
 
 - Update translations
 
