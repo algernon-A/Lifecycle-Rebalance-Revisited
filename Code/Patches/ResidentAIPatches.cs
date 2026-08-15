@@ -19,6 +19,25 @@ namespace LifecycleRebalance
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1313:Parameter names should begin with lower-case letter", Justification = "Harmony")]
     public static class ResidentAIPatches
     {
+        private static Type _cimCareAI = null;
+
+        /// <summary>
+        /// Reflects the CimCare mod's NursingHomeAI type, if present, for use in CanMakeBabies patch.
+        /// </summary>
+        public static void ReflectCimCare()
+        {
+            _cimCareAI = AssemblyUtils.GetEnabledAssembly("CimCareMod")?.GetType("CimCareMod.AI.NursingHomeAI");
+
+            if (_cimCareAI != null)
+            {
+                Logging.KeyMessage("Found CimCare NursingHomeAI type ", _cimCareAI.ToString());
+            }
+            else
+            {
+                Logging.KeyMessage("CimCare NursingHomeAI not found");
+            }
+        }
+
         /// <summary>
         /// Harmony pre-emptive Prefix patch for ResidentAI.CanMakeBabies - implements mod's minor fix so that only adult females (of less than age 180) give birth.
         /// </summary>
@@ -53,13 +72,11 @@ namespace LifecycleRebalance
                 // Check for CimCare (nursing home) mod (it has a bug where it puts unrelated adults into the same houshold/family unit, so we need to check for that and exclude them from being able to have children).
                 if (__result)
                 {
-                    // Check for CimCare mod AI is via type name.
-                    if (Singleton<BuildingManager>.instance.m_buildings.m_buffer[data.m_homeBuilding].Info.m_buildingAI is BuildingAI homeBuildingAI)
+                    // Check for CimCare mod nursing home AI.
+                    if (Singleton<BuildingManager>.instance.m_buildings.m_buffer[data.m_homeBuilding].Info.m_buildingAI.GetType() == _cimCareAI)
                     {
-                        if (homeBuildingAI.GetType().Name.StartsWith("CimCareMod"))
-                        {
-                            __result = false;
-                        }
+                        Logging.Message("Found CimCare nursing home AI for building ", data.m_homeBuilding, "; excluding citizen ", citizenID, " from being able to have children");
+                        __result = false;
                     }
                 }
             }

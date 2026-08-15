@@ -15,6 +15,17 @@ namespace LifecycleRebalance
     public sealed class Loading : PatcherLoadingBase<OptionsPanel, Patcher>
     {
         /// <summary>
+        /// Performs any actions upon successful creation of the mod.
+        /// E.g. Can be used to patch any other mods.
+        /// </summary>
+        /// <param name="loading">Loading mode (e.g. game or editor).</param>
+        protected override void CreatedActions(ILoading loading)
+        {
+            // Check for CimCare mod nursing home AI.
+            ResidentAIPatches.ReflectCimCare();
+        }
+
+        /// <summary>
         /// Performs any actions upon successful level loading completion.
         /// </summary>
         /// <param name="mode">Loading mode (e.g. game, editor, scenario, etc.).</param>
