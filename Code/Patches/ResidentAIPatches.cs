@@ -62,8 +62,8 @@ namespace LifecycleRebalance
                 // Unlock males within all groups. Find partner except for initial seeding is the exact same age group, so shortcut is allowed
                 __result =
 
-                  // Females are now limited to the time that they have aged.  Males are excluded from this calculation so females can still have children.
-                  (Citizen.GetGender(citizenID) == Citizen.Gender.Male) ||
+                  // Females are now limited to the time that they have aged.  Males are excluded from this calculation if they are under 60, so females can still have children with older males.
+                  (Citizen.GetGender(citizenID) == Citizen.Gender.Male && data.Age <= 210) ||
 
                   // Exclude females over default maximum adult age (51.4 years).
                   (data.Age <= 180 &&
